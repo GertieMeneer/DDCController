@@ -1,46 +1,35 @@
 import pystray
+from pystray import MenuItem as item
 import PIL.Image
 from monitorcontrol import get_monitors
 
-image = PIL.Image.open("./DDCController/res/monitorIcon.png")
+def create_icon(image_path):
+    return PIL.Image.open(image_path)
 
-def on_clicked(icon, item):
-    if str(item) == "Exit":
-        icon.stop()
-    elif str(item) == "Test":
-        pystray.Icon.notify(image, "Hello World", "Test")
-        print("Hello World")
-    elif str(item) == "100%":
-        for monitor in get_monitors():
+def set_brightness(luminance):
+    for monitor in get_monitors():
+        try:
             with monitor:
-                monitor.set_luminance(100)
-    # elif str(item) == "90%":
-    # elif str(item) == "80%":
-    # elif str(item) == "70%":
-    # elif str(item) == "60%":
-    # elif str(item) == "50%":
-    # elif str(item) == "40%":
-    # elif str(item) == "30%":
-    # elif str(item) == "20%":
-    # elif str(item) == "10%":
-    # elif str(item) == "0%":
-    
+                monitor.set_luminance(luminance)
+                print(f"Set brightness to {luminance}% for a monitor")
+        except Exception as e:
+            print(f"Failed to set brightness for a monitor: {e}")
 
-icon = pystray.Icon("DDCControl", image, menu=pystray.Menu(
-    pystray.MenuItem("Brightness", pystray.Menu(
-        pystray.MenuItem("100%", on_clicked),
-        pystray.MenuItem("90%", on_clicked),
-        pystray.MenuItem("80%", on_clicked),
-        pystray.MenuItem("70%", on_clicked),
-        pystray.MenuItem("60%", on_clicked),
-        pystray.MenuItem("50%", on_clicked),
-        pystray.MenuItem("40%", on_clicked),
-        pystray.MenuItem("30%", on_clicked),
-        pystray.MenuItem("20%", on_clicked),
-        pystray.MenuItem("10%", on_clicked),
-        pystray.MenuItem("0%", on_clicked),
-    )),
-    pystray.MenuItem("Exit", on_clicked)
-))
+def create_brightness_item(percentage):
+    return item(f"{percentage}%", lambda _: set_brightness(percentage))
 
-icon.run()
+def create_menu():
+    brightness_menu = [create_brightness_item(i) for i in range(0, 101, 10)]
+
+    return pystray.Menu(
+        item("Brightness", pystray.Menu(*brightness_menu)),
+        item("Exit", lambda icon, _: icon.stop())
+    )
+
+def run_icon():
+    icon.run()
+
+if __name__ == "__main__":
+    image = create_icon("./res/monitorIcon.png")
+    icon = pystray.Icon("DDCControl", image, menu=create_menu())
+    run_icon()
