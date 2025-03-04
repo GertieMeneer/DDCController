@@ -1,10 +1,18 @@
 import pystray
 from pystray import MenuItem as item
 import PIL.Image
+from PIL import Image
 from monitorcontrol import get_monitors
+import os
+import sys
 
-def create_icon(image_path):
-    return PIL.Image.open(image_path)
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
+def create_icon(icon_path):
+    return Image.open(resource_path(icon_path))
 
 def set_brightness(luminance):
     for monitor in get_monitors():
