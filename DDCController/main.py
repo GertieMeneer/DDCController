@@ -60,6 +60,6 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"Issue with monitor: {e}")
 
-    icon_path = "res\monitorIcon.png"
+    icon_path = "DDCController/res/monitorIcon.png"
     image = create_icon(icon_path)
     run_icon()
