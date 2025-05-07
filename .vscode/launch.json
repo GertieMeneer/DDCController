@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run main",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/DDCController/Cpp/main",
+            "preLaunchTask": "build",
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false
+        }
+    ]
+}
