@@ -5,7 +5,7 @@
             "name": "Run main",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/DDCController/Cpp/main",
+            "program": "${workspaceFolder}/main",
             "preLaunchTask": "build",
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false

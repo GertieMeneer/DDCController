@@ -73,5 +73,5 @@
         "qactiongroup": "cpp",
         "qsystemtrayicon": "cpp"
     },
-    "cmake.sourceDirectory": "/home/gertiemeneer/Documents/repos/DDCController/DDCController/Cpp"
+    "cmake.sourceDirectory": "/home/gertiemeneer/Documents/repos/DDCController"
 }
