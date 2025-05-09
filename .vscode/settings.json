@@ -68,7 +68,10 @@
         "thread": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "qpushbutton": "cpp",
+        "qactiongroup": "cpp",
+        "qsystemtrayicon": "cpp"
     },
     "cmake.sourceDirectory": "/home/gertiemeneer/Documents/repos/DDCController/DDCController/Cpp"
 }
