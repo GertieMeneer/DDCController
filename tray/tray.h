@@ -27,16 +27,20 @@ private:
     QSystemTrayIcon *icon;
     QVBoxLayout *layout;
     QWidget *popup;
-    QSlider *popupSlider;
+    QSlider *brightnessSlider;
+    QSlider *contrastSlider;
     QPushButton *closeButton;
     QPushButton *exitButton;
 
     DDCA_Display_Handle *display;
     DDCA_Status *status;
 
+    void sliderReleased(QSlider *slider, DDCA_Vcp_Feature_Code code, const QString &errorLabel);
+
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
-    void popupSliderReleased();
+    void brightnessSliderReleased();
+    void contrastSliderReleased();
     void closeButtonPressed();
     void exitButtonPressed();
 };

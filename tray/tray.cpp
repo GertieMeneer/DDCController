@@ -12,21 +12,29 @@ void tray::start()
 
     icon = new QSystemTrayIcon(nullptr);
     popup = new QWidget(nullptr, Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
-    popupSlider = new QSlider(Qt::Horizontal, popup);
+    QLabel *brightnessLabel = new QLabel("Brightness", popup);
+    brightnessSlider = new QSlider(Qt::Horizontal, popup);
+    QLabel *contrastLabel = new QLabel("Contrast", popup);
+    contrastSlider = new QSlider(Qt::Horizontal, popup);
     layout = new QVBoxLayout(popup);
     closeButton = new QPushButton("Close", popup);
     exitButton = new QPushButton("Exit", popup);
 
-    popup->setWindowTitle("Monitor Brightness Control");
-    popupSlider->setRange(0, 100);
+    popup->setWindowTitle("Monitor Control");
+    brightnessSlider->setRange(0, 100);
+    contrastSlider->setRange(0, 100);
     exitButton->setStyleSheet("QPushButton { background-color: firebrick; color: white; }");
 
-    layout->addWidget(popupSlider);
+    layout->addWidget(brightnessLabel);
+    layout->addWidget(brightnessSlider);
+    layout->addWidget(contrastLabel);
+    layout->addWidget(contrastSlider);
     layout->addWidget(closeButton);
     layout->addWidget(exitButton);
 
     connect(icon, &QSystemTrayIcon::activated, this, &tray::iconActivated);
-    connect(popupSlider, &QSlider::sliderReleased, this, &tray::popupSliderReleased);
+    connect(brightnessSlider, &QSlider::sliderReleased, this, &tray::brightnessSliderReleased);
+    connect(contrastSlider, &QSlider::sliderReleased, this, &tray::contrastSliderReleased);
     connect(closeButton, &QPushButton::released, this, &tray::closeButtonPressed);
     connect(exitButton, &QPushButton::released, this, &tray::exitButtonPressed);
 
@@ -47,9 +55,9 @@ void tray::iconActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
-void tray::popupSliderReleased()
+void tray::sliderReleased(QSlider *slider, DDCA_Vcp_Feature_Code code, const QString &errorLabel)
 {
-    int value = popupSlider->value();
+    int value = slider->value();
 
     DDCA_Display_Info_List *info_list = nullptr;
     DDCA_Status rc = ddca_get_display_info_list2(false, &info_list);
@@ -72,14 +80,15 @@ void tray::popupSliderReleased()
             continue;
         }
 
-        DDCA_Vcp_Feature_Code code = 0x10;
         DDCA_Non_Table_Vcp_Value old_value;
         ddca_get_non_table_vcp_value(disp_handle, code, &old_value);
-        uint8_t brightnessValue = static_cast<uint8_t>(value);
         rc = ddca_set_non_table_vcp_value(disp_handle, code, 0, value);
         if (rc != 0)
         {
-            QString message = QString("Failed to set brightness for display %1.\nError code: %2").arg(i).arg(rc);
+            QString message = QString("Failed to set %1 for display %2.\nError code: %3")
+                                  .arg(errorLabel)
+                                  .arg(i)
+                                  .arg(rc);
             icon->showMessage("Error", message, QSystemTrayIcon::Warning, 5000);
         }
 
@@ -87,6 +96,16 @@ void tray::popupSliderReleased()
     }
 
     ddca_free_display_info_list(info_list);
+}
+
+void tray::brightnessSliderReleased()
+{
+    sliderReleased(brightnessSlider, 0x10, "brightness");
+}
+
+void tray::contrastSliderReleased()
+{
+    sliderReleased(contrastSlider, 0x12, "contrast");
 }
 
 void tray::closeButtonPressed()

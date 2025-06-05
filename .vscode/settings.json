@@ -71,7 +71,8 @@
         "variant": "cpp",
         "qpushbutton": "cpp",
         "qactiongroup": "cpp",
-        "qsystemtrayicon": "cpp"
+        "qsystemtrayicon": "cpp",
+        "qscreen": "cpp"
     },
     "cmake.sourceDirectory": "/home/gertiemeneer/Documents/repos/DDCController"
 }
