@@ -10,7 +10,13 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(DDCUTIL REQUIRED ddcutil)
 
-add_executable(main main.cpp tray/tray.cpp tray/tray.h)
+add_executable(main
+    main.cpp
+    tray/tray.cpp
+    tray/tray.h
+    display_communicator/display_communicator.cpp
+    display_communicator/display_communicator.h
+)
 
 target_include_directories(main PRIVATE ${DDCUTIL_INCLUDE_DIRS})
 

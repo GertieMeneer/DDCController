@@ -15,6 +15,7 @@
 #include <QPushButton>
 #include <ddcutil_c_api.h>
 #include <stdlib.h>
+#include "../display_communicator/display_communicator.h"
 
 class tray : public QObject
 {
@@ -35,10 +36,11 @@ private:
     DDCA_Display_Handle *display;
     DDCA_Status *status;
 
-    void sliderReleased(QSlider *slider, DDCA_Vcp_Feature_Code code, const QString &errorLabel);
+    display_communicator *communicator;
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
+    void getValues();
     void brightnessSliderReleased();
     void contrastSliderReleased();
     void closeButtonPressed();

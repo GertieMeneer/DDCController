@@ -46,8 +46,8 @@ void tray::iconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     if (reason == QSystemTrayIcon::Trigger)
     {
+        getValues();
         QPoint pos = QCursor::pos();
-        popup->move(pos + QPoint(0, -50));
         popup->show();
         popup->raise();
         popup->activateWindow();
@@ -55,57 +55,23 @@ void tray::iconActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
-void tray::sliderReleased(QSlider *slider, DDCA_Vcp_Feature_Code code, const QString &errorLabel)
+void tray::getValues()
 {
-    int value = slider->value();
+    DDCA_Non_Table_Vcp_Value brightness = communicator->getValue(0x10);
+    brightnessSlider->setValue((brightness.sh << 8) | brightness.sl);
 
-    DDCA_Display_Info_List *info_list = nullptr;
-    DDCA_Status rc = ddca_get_display_info_list2(false, &info_list);
-
-    if (rc != 0 || !info_list || info_list->ct == 0)
-    {
-        icon->showMessage("Error", "Failed to get display info list", QSystemTrayIcon::Warning, 5000);
-        return;
-    }
-
-    for (int i = 0; i < info_list->ct; ++i)
-    {
-        const DDCA_Display_Info &info = info_list->info[i];
-        DDCA_Display_Ref display = info.dref;
-        DDCA_Display_Handle disp_handle;
-        rc = ddca_open_display2(display, true, &disp_handle);
-        if (rc != 0)
-        {
-            icon->showMessage("Error", "Failed to open display handle for display", QSystemTrayIcon::Warning, 5000);
-            continue;
-        }
-
-        DDCA_Non_Table_Vcp_Value old_value;
-        ddca_get_non_table_vcp_value(disp_handle, code, &old_value);
-        rc = ddca_set_non_table_vcp_value(disp_handle, code, 0, value);
-        if (rc != 0)
-        {
-            QString message = QString("Failed to set %1 for display %2.\nError code: %3")
-                                  .arg(errorLabel)
-                                  .arg(i)
-                                  .arg(rc);
-            icon->showMessage("Error", message, QSystemTrayIcon::Warning, 5000);
-        }
-
-        ddca_close_display(disp_handle);
-    }
-
-    ddca_free_display_info_list(info_list);
+    DDCA_Non_Table_Vcp_Value contrast = communicator->getValue(0x12);
+    contrastSlider->setValue((contrast.sh << 8) | contrast.sl);
 }
 
 void tray::brightnessSliderReleased()
 {
-    sliderReleased(brightnessSlider, 0x10, "brightness");
+    communicator->setValue(brightnessSlider, 0x10, "brightness");
 }
 
 void tray::contrastSliderReleased()
 {
-    sliderReleased(contrastSlider, 0x12, "contrast");
+    communicator->setValue(contrastSlider, 0x12, "contrast");
 }
 
 void tray::closeButtonPressed()
