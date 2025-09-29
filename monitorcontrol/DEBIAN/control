@@ -1,6 +1,7 @@
 Package: monitorcontrol
-Version: 3.0
+Maintainer: GertieMeneer
+Version: 3.1
 Section: utils
 Priority: optional
 Architecture: amd64
-Description: Control monitor brightness and contrast
+Description: Control external monitor brightness and contrast

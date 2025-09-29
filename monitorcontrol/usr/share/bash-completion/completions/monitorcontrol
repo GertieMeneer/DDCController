@@ -1,0 +1,12 @@
+_monitorcontrol_complete() {
+    local cur
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+
+    if [[ $COMP_CWORD -eq 1 ]]; then
+        COMPREPLY=( $(compgen -W "brightness contrast" -- "$cur") )
+        return 0
+    fi
+}
+
+complete -F _monitorcontrol_complete monitorcontrol

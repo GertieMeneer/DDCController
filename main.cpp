@@ -12,11 +12,11 @@ int main(int argc, char *argv[])
 {
     std::string option = argv[1];
 
-    if (option == "--brightness") {
+    if (option == "brightness") {
         int value = convert_input(argv[2]);
         std::cout << "Setting brightness to " << value << "%\n";
         communicator->setValue(0x10, value);
-    } else if (option == "--contrast") {
+    } else if (option == "contrast") {
         int value = convert_input(argv[2]);
         std::cout << "Setting contrast to " << value << "%\n";
         communicator->setValue(0x12, value);
