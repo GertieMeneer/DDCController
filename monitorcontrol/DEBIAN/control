@@ -1,6 +1,6 @@
-Package: MonitorControl
-Version: 1.0
+Package: monitorcontrol
+Version: 3.0
 Section: utils
 Priority: optional
 Architecture: amd64
-Description: Control monitor brightness
+Description: Control monitor brightness and contrast
