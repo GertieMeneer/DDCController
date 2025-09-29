@@ -7,11 +7,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(DDCUTIL REQUIRED ddcutil)
 
-add_executable(main
+add_executable(monitorcontrol
     main.cpp
     display_communicator/display_communicator.cpp
 )
 
-target_include_directories(main PRIVATE ${DDCUTIL_INCLUDE_DIRS})
+target_include_directories(monitorcontrol PRIVATE ${DDCUTIL_INCLUDE_DIRS})
 
-target_link_libraries(main PRIVATE ${DDCUTIL_LIBRARIES})
+target_link_libraries(monitorcontrol PRIVATE ${DDCUTIL_LIBRARIES})

@@ -10,7 +10,6 @@ class display_communicator
 public:
     display_communicator();
     void setValue(DDCA_Vcp_Feature_Code code, int value);
-    DDCA_Non_Table_Vcp_Value getValue(DDCA_Vcp_Feature_Code code);
 };
 
 #endif

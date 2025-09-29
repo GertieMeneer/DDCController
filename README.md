@@ -1,10 +1,12 @@
 # DDCControllerWindows
+
 Monitor Controller for Windows
 
 ## Building and installing
-- ```sudo apt install libddcutil-dev```
-- ```cmake -S . -B build```
-- ```cmake --build build```<br>
-- Put executable file inside of ```monitor_control/usr/bin/```
-- ```dpkg -b monitor_control```
+
+- `sudo apt install libddcutil-dev`
+- `cmake -S . -B build`
+- `cmake --build build`<br>
+- Put executable file inside of `monitorcontrol/usr/bin/`
+- `dpkg -b monitorcontrol`
 - Install the .deb file

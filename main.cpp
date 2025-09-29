@@ -20,13 +20,8 @@ int main(int argc, char *argv[])
         int value = convert_input(argv[2]);
         std::cout << "Setting contrast to " << value << "%\n";
         communicator->setValue(0x12, value);
-    } else if (option == "--show") {
-        int raw_brightness = communicator->getValue(0x10).sl;
-        int raw_contrast = communicator->getValue(0x12).sl;
-        std::cout << "Brightness: " << (raw_brightness << 8) << "%\n";
-        std::cout << "Contrast: " << (raw_contrast << 8) << "%\n";
     } else {
-        std::cout << "Usage: --contrast <value>, --brightness <value>, --show" << std::endl;
+        std::cout << "Usage: --contrast <value>, --brightness <value>" << std::endl;
         return 1;
     }
 
