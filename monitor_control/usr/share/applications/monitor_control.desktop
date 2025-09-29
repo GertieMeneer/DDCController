@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Monitor Control
-Comment=Control monitor brightness
-Exec=/usr/bin/monitor_control
-Icon=monitor_control
-Terminal=false
-Type=Application
-Categories=Utility;

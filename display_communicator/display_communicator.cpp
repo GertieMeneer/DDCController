@@ -1,18 +1,18 @@
 #include "./display_communicator.h"
+#include <cstdlib>
+#include <iostream>
 
 display_communicator::display_communicator() {}
 
-void display_communicator::setValue(QSlider *slider, DDCA_Vcp_Feature_Code code, const QString &errorLabel)
+void display_communicator::setValue(DDCA_Vcp_Feature_Code code, int value)
 {
-    int value = slider->value();
-
     DDCA_Display_Info_List *info_list = nullptr;
     DDCA_Status rc = ddca_get_display_info_list2(false, &info_list);
 
     if (rc != 0 || !info_list || info_list->ct == 0)
     {
-        // icon->showMessage("Error", "Failed to get display info list", QSystemTrayIcon::Warning, 5000);
-        return;
+        std::cout << "Failed to get display info list" << std::endl;
+        exit(1);
     }
 
     for (int i = 0; i < info_list->ct; ++i)
@@ -23,7 +23,7 @@ void display_communicator::setValue(QSlider *slider, DDCA_Vcp_Feature_Code code,
         rc = ddca_open_display2(display, true, &disp_handle);
         if (rc != 0)
         {
-            // icon->showMessage("Error", "Failed to open display handle for display", QSystemTrayIcon::Warning, 5000);
+            std::cout << "Failed to open display handle for display" << std::endl;
             continue;
         }
 
@@ -32,11 +32,7 @@ void display_communicator::setValue(QSlider *slider, DDCA_Vcp_Feature_Code code,
         rc = ddca_set_non_table_vcp_value(disp_handle, code, 0, value);
         if (rc != 0)
         {
-            QString message = QString("Failed to set %1 for display %2.\nError code: %3")
-                                  .arg(errorLabel)
-                                  .arg(i)
-                                  .arg(rc);
-            // icon->showMessage("Error", message, QSystemTrayIcon::Warning, 5000);
+            std::cout << "rc is not 0" << std::endl;
         }
 
         ddca_close_display(disp_handle);
@@ -52,8 +48,8 @@ DDCA_Non_Table_Vcp_Value display_communicator::getValue(DDCA_Vcp_Feature_Code co
 
     if (rc != 0 || !info_list || info_list->ct == 0)
     {
-        // icon->showMessage("Error", "Failed to get display info list", QSystemTrayIcon::Warning, 5000);
-        return DDCA_Non_Table_Vcp_Value{};
+        std::cout << "Failed to get display info list" << std::endl;
+        exit(1);
     }
 
     const DDCA_Display_Info &info = info_list->info[1];
@@ -62,9 +58,9 @@ DDCA_Non_Table_Vcp_Value display_communicator::getValue(DDCA_Vcp_Feature_Code co
     rc = ddca_open_display2(display, true, &disp_handle);
     if (rc != 0)
     {
-        // icon->showMessage("Error", "Failed to open display handle for display", QSystemTrayIcon::Warning, 5000);
+        std::cout << "Failed to open display handle for display" << std::endl;
         ddca_free_display_info_list(info_list);
-        return DDCA_Non_Table_Vcp_Value{};
+        exit(1);
     }
 
     DDCA_Non_Table_Vcp_Value value;
@@ -73,8 +69,9 @@ DDCA_Non_Table_Vcp_Value display_communicator::getValue(DDCA_Vcp_Feature_Code co
     ddca_free_display_info_list(info_list);
     if (rc != 0)
     {
-        return DDCA_Non_Table_Vcp_Value{};
-        // icon->showMessage("Error", QString("Failed to get value for display"), QSystemTrayIcon::Warning, 5000);
+        std::cout << "Failed to get value for display" << std::endl;
+        exit(1);
     }
+
     return value;
 }
